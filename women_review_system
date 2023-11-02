@@ -1,0 +1,61 @@
+class ClothingItem:
+    def __init__(self, name, category, price, brand):
+        self.name = name
+        self.category = category
+        self.price = price
+        self.brand = brand
+        self.reviews = []
+
+    def add_review(self, review_text, rating):
+        review = {
+            "review_text": review_text,
+            "rating": rating
+        }
+        self.reviews.append(review)
+
+    def average_rating(self):
+        if not self.reviews:
+            return 0
+        total_ratings = sum(review["rating"] for review in self.reviews)
+        return total_ratings / len(self.reviews)
+
+class ReviewSystem:
+    def __init__(self):
+        self.clothing_items = []
+
+    def add_clothing_item(self, name, category, price, brand):
+        clothing_item = ClothingItem(name, category, price, brand)
+        self.clothing_items.append(clothing_item)
+        return clothing_item
+
+    def add_review_to_item(self, item_name, review_text, rating):
+        item = next((item for item in self.clothing_items if item.name == item_name), None)
+        if item:
+            item.add_review(review_text, rating)
+            print(f"Review added for {item_name}")
+        else:
+            print(f"Item {item_name} not found")
+
+    def average_rating_of_item(self, item_name):
+        item = next((item for item in self.clothing_items if item.name == item_name), None)
+        if item:
+            avg_rating = item.average_rating()
+            print(f"Average rating for {item_name} is: {avg_rating}")
+        else:
+            print(f"Item {item_name} not found")
+
+# Example Usage:
+review_system = ReviewSystem()
+
+# Adding clothing items
+item1 = review_system.add_clothing_item("Dress1", "Dresses", 59.99, "XYZ Brand")
+item2 = review_system.add_clothing_item("Top2", "Tops", 29.99, "ABC Brand")
+
+# Adding reviews to items
+review_system.add_review_to_item("Dress1", "Great fit and comfortable material!", 5)
+review_system.add_review_to_item("Dress1", "Color was not as expected.", 3)
+review_system.add_review_to_item("Top2", "Perfect for casual wear.", 4)
+
+# Calculating average ratings
+review_system.average_rating_of_item("Dress1")
+review_system.average_rating_of_item("Top2")
